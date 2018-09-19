@@ -18,7 +18,7 @@ const fs = require('fs');
 // }
 
 exports.readStaticFile = path => {
-    return new Promise ((resolve, reject)=>{
+    return new Promise ((resolve, reject)=>{ //promised
         try{
             console.log("fstat:"+fs.statSync(path));
             const fileStreamer = fs.createReadStream(path);
