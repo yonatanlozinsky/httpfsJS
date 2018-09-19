@@ -5,7 +5,11 @@ const fs = require('fs'),
 
 
 class RequestHandler{
-
+/**
+ * Identifies different types of requests and maps methods to them.
+ * @param {IncomingMessage} request request object from http server
+ * @param {ServerResponse} response response object from http server
+ */
     static identify (request, response){
         
         if (request.method === "GET"){
@@ -15,23 +19,23 @@ class RequestHandler{
                 response.writeHead(200, {'Content-Type':'text/html'});
                 
                 const joinPath = Path.join(__dirname,'static/index.html');
-                fileIO.readStaticFile(joinPath)
-                .then(result=>response.end(result))
-                .catch(error=>console.log(error));
+                fileIO.readStaticFile(joinPath,response)
+                //.then(result=>response.end(result))
+                //.catch(error=>console.log(error));
             }
 
             else if (request.url.startsWith("/static")){ //static files  
-                fileIO.readStaticFile(joinPath)
-                .then(result=>{
-                    response.writeHead(200, {'Content-Type':'text/html'});
-                    response.end(result);
-                })
-                
-                .catch(error=>{
-                    response.writeHead(404, {'Content-Type':'text/plain'});
-                    response.write("Page was not found yo");
-                    response.end();
-                });
+                fileIO.readStaticFile(joinPath,response)
+                // .then(result=>{
+                //     response.writeHead(200, {'Content-Type':'text/html'});
+                //     response.end(result);
+                //})
+
+                // .catch(error=>{
+                //     response.writeHead(404, {'Content-Type':'text/plain'});
+                //     response.write("Page was not found yo");
+                //     response.end();
+                // });
             }
 
             else {
