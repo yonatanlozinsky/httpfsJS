@@ -2,7 +2,7 @@ const form = document.querySelector("form"),
     fileInputElement = document.querySelector('#fileInput'),
     submitEvent = new Event("submit");
 
-
+//
 // fileInputElement.addEventListener("change",event=>{
 
 //     const fileReader = new FileReader();

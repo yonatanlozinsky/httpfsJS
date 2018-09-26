@@ -45,7 +45,7 @@ class RequestHandler{
 
                 await request.on("end",()=>{
                     console.log("end happened");
-                    body=Buffer.concat(body).toString();
+                    body=Buffer.concat(body).toString(); //added buffer
                     console.log(body.length);
                     console.log(body.slice(0,500));
                 });
