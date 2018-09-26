@@ -20,7 +20,13 @@ exports.readStaticFile = (path,response) => {
             console.log(path);
 
     
-}
+        }
+    }
+
+    //not finisheddd
+exports.writeFile = path => {
+    const fileStreamer = fs.createWriteStream();
+    //
 }
 
 

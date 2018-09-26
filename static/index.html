@@ -2,9 +2,9 @@
 
 <div id="app">
     <span>Upload your file yo</span>
-    <form id="fm">
-        <input type="file" id="fileInput" />
-
+    <form id="fm" method="post" enctype="multipart/form-data" action="/upload">
+        <input type="file" id="fileInput" name="upload" multiple>
+        <input type="submit" id="submitFile" value="Submit">
     </form>
 </div>
 

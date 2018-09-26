@@ -23,5 +23,8 @@
   "bugs": {
     "url": "https://github.com/luzushka/httpfsJS/issues"
   },
-  "homepage": "https://github.com/luzushka/httpfsJS#readme"
+  "homepage": "https://github.com/luzushka/httpfsJS#readme",
+  "dependencies": {
+    "nodemon": "^1.18.4"
+  }
 }

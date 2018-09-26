@@ -11,7 +11,7 @@ class RequestHandler{
  * @param {ServerResponse} response response object from http server
  */
     static identify (request, response){
-        
+
         if (request.method === "GET"){
             const joinPath = Path.join(__dirname,request.url);
 
@@ -19,23 +19,11 @@ class RequestHandler{
                 response.writeHead(200, {'Content-Type':'text/html'});
                 
                 const joinPath = Path.join(__dirname,'static/index.html');
-                fileIO.readStaticFile(joinPath,response)
-                //.then(result=>response.end(result))
-                //.catch(error=>console.log(error));
+                fileIO.readStaticFile(joinPath,response);
             }
 
-            else if (request.url.startsWith("/static")){ //static files  
-                fileIO.readStaticFile(joinPath,response)
-                // .then(result=>{
-                //     response.writeHead(200, {'Content-Type':'text/html'});
-                //     response.end(result);
-                //})
-
-                // .catch(error=>{
-                //     response.writeHead(404, {'Content-Type':'text/plain'});
-                //     response.write("Page was not found yo");
-                //     response.end();
-                // });
+            else if (request.url.startsWith("/static/")){ //static files  
+                fileIO.readStaticFile(joinPath,response);
             }
 
             else {
@@ -44,8 +32,37 @@ class RequestHandler{
                 response.end();
             }
         }
-    }
 
+        else if (request.method === "POST"){
+            if (request.url==="/upload"){ //handle uploading
+                (async (request)=>{
+                    let body=[]; //push chunks to body
+
+                    request.on("data",chunk=>{
+                        console.log("chunklen:"+chunk.length.toString());
+                        body.push(chunk);
+                });
+
+                await request.on("end",()=>{
+                    console.log("end happened");
+                    body=Buffer.concat(body).toString();
+                    console.log(body.length);
+                    console.log(body.slice(0,500));
+                });
+
+                return body;
+
+            })(request)
+                .then((body)=>{
+                    response.writeHead("201",
+                    {'Content-Type':'text/plain'});
+                    response.write("middle");
+                    response.end("FINISHED");
+                })
+                .catch((err)=>console.log(err));
+            }
+        }
+    }
 }
 
 exports.RequestHandler = RequestHandler;
