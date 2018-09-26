@@ -1,5 +1,7 @@
 # httpfsJS
-A file upload client+server written in vanilla JS (ES6) and NodeJS
+A file upload client+server written in vanilla JS (ES6) and NodeJS.
+In the time being, vanilla means no web framework (no ExpressJS, no React/Angular),
+and no npm packages except MongoDB related.
 
 ## How to run
 ```
