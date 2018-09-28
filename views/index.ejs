@@ -1,0 +1,26 @@
+<!doctype HTML>
+
+<div id="app">
+    <span>Upload your file yo</span>
+    <form id="fm" method="post" enctype="multipart/form-data" action="/upload">
+        <input type="file" id="fileInput" name="upload" multiple>
+        <input type="submit" id="submitFile" value="Submit">
+    </form>
+</div>
+
+<div id="preview" style="height:300px;">
+    <% if (files){ %>
+        <% files.forEach((file)=>{ %>
+            <div class="mongo-file">
+                <%= file.filename %>
+                <form method="POST" action="/files/<%= file._id %>?_method=DELETE">
+                <button class="delete-btn">DL</button></form>
+            </div>
+    <% })} else { %>
+        <p>No files m8</p>
+        <% } %>
+
+</div>
+
+
+<script src="static/index.js"></script>
