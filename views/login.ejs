@@ -1,0 +1,17 @@
+<div id="container">
+<% if (user){ %>
+    <span>Hello, <%= user.username %>!</span>
+<% } else { %>
+    <span>nouser</span>
+    <% } %>
+        <form method="POST" class="sign-up-form" action="/users/login">
+        <label for="username" value="Username">Username:</label>
+        <input id="username" type="text" name="username">
+        <label for="password" value="password">Password:</label>
+        <input id="password" type="password" name="password">
+    
+        <input id="submit" type="submit">
+    
+        </form>
+    
+    </div>

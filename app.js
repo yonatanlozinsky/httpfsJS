@@ -5,21 +5,25 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const multer = require('multer');
 const multerGridFS = require('multer-gridfs-storage');
+const session = require('express-session');
 const gridFsStream = require('gridfs-stream');
 const methodOverride = require ('method-override');
-
+const expressValidator = require('express-validator');
+const passport = require('passport');
 
 let gfs;
-const mongoURI = "mongodb://@localhost:27017/fileDB";
-const conn = mongoose.createConnection(mongoURI);
 
-conn.once("open", ()=>{
+const mongoURI = "mongodb://localhost:27017/fileDB";
+mongoose.createConnection(mongoURI)
+.then((conn)=>{
     gfs = gridFsStream(conn.db, mongoose.mongo);
     gfs.collection('uploads');
-    console.log("Made connection to mongo!")
+    console.log("Made connection to mongo!");
 });
 
 ////
+
+
 
 const storage = new multerGridFS({
   url: mongoURI,
@@ -32,8 +36,10 @@ const storage = new multerGridFS({
         const filename = buf.toString('hex') + path.extname(file.originalname);
         const fileInfo = {
           filename: filename,
-          bucketName: 'uploads'
-        };
+          bucketName: 'uploads',
+          metadata:{
+              uploaderId: req.user._id
+        }};
         resolve(fileInfo);
         });
     });
@@ -47,10 +53,63 @@ const upload = multer({ storage });
 
 
 const app = express();
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+
 app.use(methodOverride("_method"));
+
+
+
+
+
 app.set('view engine', 'ejs');
 
+//session
+app.use(session({
+    secret: 'keyboard cat',
+    resave: true,
+    saveUninitialized: true
+  }));
+//
+
+//error validator
+app.use(expressValidator({
+    errorFormatter: function(param, msg, value) {
+        var namespace = param.split('.')
+        , root    = namespace.shift()
+        , formParam = root;
+  
+      while(namespace.length) {
+        formParam += '[' + namespace.shift() + ']';
+      }
+      return {
+        param : formParam,
+        msg   : msg,
+        value : value
+      };
+    }
+  }));
+
+
+//passport
+
+app.use(passport.initialize());
+app.use(passport.session());
+require('./config').passport(passport);
+
+//routes
+
+//user-session route
+app.get("*", (request, response, next)=>{
+    response.locals.user = request.user || null;
+    console.log("USER");
+    console.log(request.user);
+    console.log("enduser");
+    next();
+})
+
+const usersRoute = require('./routes/users');
+app.use('/users', usersRoute);
 
 //index get
 app.get('/', (request, response)=>{
@@ -70,6 +129,7 @@ app.get('/', (request, response)=>{
 //upload file
 app.post('/upload', upload.single('upload'),(request, response)=>{
     response.json({file:request.file});
+
 });
 
 //get files
