@@ -1,0 +1,35 @@
+.navbar {
+    top:-10%;
+    width:100%;
+    display:inline-block;
+    background-color:white;
+}
+
+.navbar ul{
+    list-style-type: none;
+    margin:0px;
+    padding:0px;
+}
+
+.navbar li:hover {
+    color:white;
+    background-color:rgb(51, 192, 126);
+}
+
+.navbar a {
+    float:left;
+    display:block;
+    padding:8px;
+    background-color:white;
+    color:green;
+    text-decoration: none;
+}
+
+.navbar a:hover {
+    color:white;
+    background-color:rgb(51, 192, 126);
+}
+
+.signup-btn {
+    float:right;
+}
