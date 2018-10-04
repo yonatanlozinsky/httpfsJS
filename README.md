@@ -17,3 +17,5 @@ node index
 - [ ] Finish all React components
 - [ ] Add JWT authentication
 - [ ] Generate file access links
+- [ ] Test
+- [ ] Build
