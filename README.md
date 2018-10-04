@@ -1,5 +1,5 @@
 # httpfsJS
-A file upload client+server written in MERN stack.
+A file upload client+server written using MERN stack.
 
 ## How to run
 ```
