@@ -1,7 +1,7 @@
 # httpfsJS
 A file upload client+server written using MERN stack.
 
-## How to run
+## How to run (not finished yet)
 ```
 git clone https://github.com/luzushka/httpfsJS
 cd httpfsJS
@@ -15,7 +15,9 @@ node index
 - [X] Add GridFS for files
 - [X] Basic site with CSS & JS
 - [ ] Finish all React components
+- [ ] Add redux state management (?)
 - [ ] Add JWT authentication
 - [ ] Generate file access links
 - [ ] Test
 - [ ] Build
+- [ ] Deploy (?)
