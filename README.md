@@ -1,7 +1,5 @@
 # httpfsJS
-A file upload client+server written in vanilla JS (ES6) and NodeJS.
-In the time being, vanilla means no web framework (no ExpressJS, no React/Angular),
-and no npm packages except MongoDB related.
+A file upload client+server written in MERN stack.
 
 ## How to run
 ```
@@ -11,12 +9,11 @@ node index
 ```
 
 ### To do list:
-- [X] Simple HTML + JS interface that reads files
+- [X] Simple HTML + JS interface that reads files (ejs)
 - [X] Simple NodeJS http server that serves static files
-- [X] Change promise-based fileIO.js to stream-based
-- [ ] Add write function to fileIO.js
-- [ ] Add MongoDB for users
-- [ ] Handle user sessions
-- [ ] Add GridFS for files
+- [X] Add MongoDB for users
+- [X] Add GridFS for files
+- [X] Basic site with CSS & JS
+- [ ] Finish all React components
+- [ ] Add JWT authentication
 - [ ] Generate file access links
-- [ ] Style site with CSS & JS
