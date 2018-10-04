@@ -1,7 +1,7 @@
 const express = require('express');
 const bcrypt = require('bcryptJS');
 const passport = require('passport');
-const User = require ('../userAPI');
+const User = require ('../models/user');
 const router = express.Router();
 
 
@@ -17,8 +17,7 @@ router.post('/signup',(request,response)=>{
     const password2 = request.body.password2;
     const email = request.body.email;
 
-  
-
+    //check if valid input
 
     request.checkBody('username', 'Username is a required field!').notEmpty();
     request.checkBody('password', 'Password is a required field!').notEmpty();
@@ -77,12 +76,33 @@ router.get('/login', (request,response)=>{
 //log-in form
 router.post('/login', (request, response, next)=>{
     passport.authenticate('local',{
+
         successRedirect:'/',
         failureRedirect:'/users/login',
 
     })(request, response, next)
+
+
+
+    response.json({"nana":"sdfsdf"});
+
+
 });
 
+//logout
+
+router.get('/logout', function(req, res, next) {
+    if (req.session) {
+      // delete session object
+      req.session.destroy(function(err) {
+        if(err) {
+          return next(err);
+        } else {
+          return res.redirect('/');
+        }
+      });
+    }
+  });
 
 
 module.exports = router;

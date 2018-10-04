@@ -1,6 +1,59 @@
 <!doctype HTML>
 
 <% if (user){ %>
+
+    <nav class="nav" style="position:relative;top:0%;left:0%;height:20px;background-color:black;color:white;">
+            <span>Hello, <%= user.username %>!</span>
+            <a href="/users/logout" class="logout-btn" style="text-align:right;color:white;text-decoration: none; float:right;">Logout</a>
+        </nav>
+    <div id="app">
+            <span>Upload your file yo</span>
+            <form id="fm" method="post" enctype="multipart/form-data" action="/files/upload">
+                <input type="file" id="fileInput" name="upload" multiple>
+                <input type="submit" id="submitFile" value="Submit">
+            </form>
+        </div>
+        
+        <div id="preview" style="height:300px;">
+            <% if (files){ %>
+                <% files.forEach((file)=>{ %>
+                    <div class="mongo-file">
+                        <%= file.filename %>
+                    <form method="POST" action="/files/<%= file._id %>?_method=DELETE">
+
+                        <button class="custon-btn">Delete</button>
+                    </form>
+
+                    <form method="GET" action="/file/<%= file.filename %>">
+
+                        <button class="custon-btn" style="display:block">Download</button>
+                    </form>
+
+
+                    </div>
+
+                    <footer style="position:fixed; left:0%;bottom:0px; text-align:center; background-color:black;color:white;width:100%">lalala</footer>
+            <% })} else { %>
+                <p>No files m8</p>
+                <% } %>
+        
+        </div>
+        
+        
+        <script src="static/index.js"></script>
+
+    
+    <% } else { %>
+        <span>In order to upload a file, you should <a href="/users/login">login</a> or
+        <a href="/users/signup">register</a>
+        </span>
+        <% } %>
+
+
+
+<!-- <!doctype HTML>
+
+<% if (user){ %>
     <span>Hello, <%= user.username %>!</span>
     <div id="app">
             <span>Upload your file yo</span>
@@ -31,4 +84,4 @@
     <% } else { %>
         <span>In order to upload a file, you should <a href="/users/login">login</a> first!</span>
         <% } %>
-
+ -->

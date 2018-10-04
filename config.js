@@ -1,8 +1,13 @@
 const LocalStrategy = require('passport-local').Strategy;
+const JWTStrategy = require('passport-jwt').JWTStrategy; //add jwt later
+const Strategy = require('passport-jwt').Strategy;
+
+
+
 const bcrypt = require('bcryptJS');
 
 module.exports.passport = passport=>{
-        const User = require('./userAPI');
+        const User = require('./models/user');
 
         passport.use(new LocalStrategy((username, password, done)=>{
             let query = {username:username};
@@ -12,7 +17,7 @@ module.exports.passport = passport=>{
                 console.log(username);
                 bcrypt.compare(password, user.password)
                 .then(result=>{console.log(result);
-                return done(null,user);
+                return done(null, user);
             })
                 .catch(err=>{console.log(err);
                 return done(null, false, {message:"Password didn't match!", error:err})});
@@ -23,12 +28,12 @@ module.exports.passport = passport=>{
             })
         }));
 
-        passport.serializeUser(function(user, done) {
+        passport.serializeUser((user, done) => {
             done(null, user.id);
           });
           
-          passport.deserializeUser(function(id, done) {
-            User.findById(id, function(err, user) {
+          passport.deserializeUser((id, done) => {
+            User.findById(id, (err, user)=> {
               done(err, user);
             });
           });
