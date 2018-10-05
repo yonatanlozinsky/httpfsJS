@@ -91,10 +91,10 @@ router.post('/login', (request, response, next)=>{
 
 //logout
 
-router.get('/logout', function(req, res, next) {
+router.get('/logout', (req, res, next)=> {
     if (req.session) {
       // delete session object
-      req.session.destroy(function(err) {
+      req.session.destroy(err => {
         if(err) {
           return next(err);
         } else {
