@@ -28,10 +28,10 @@ app.use(session({
   }));
 //
 
-//error validator
+//error validator middleware
 app.use(expressValidator({
-    errorFormatter: function(param, msg, value) {
-        var namespace = param.split('.')
+    errorFormatter: (param, msg, value)=> {
+        let namespace = param.split('.')
         , root    = namespace.shift()
         , formParam = root;
   
