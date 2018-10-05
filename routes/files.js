@@ -74,7 +74,7 @@ router.get('/all', (request,response)=>{
 })});
 
 //file downloader
-router.get('/download/:id', function(req, res){
+router.get('/download/:id',(req, res) => {
     gfs.collection('uploads'); //set collection name to lookup into
 
     /** First check if file exists */
