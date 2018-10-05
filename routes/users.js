@@ -83,10 +83,6 @@ router.post('/login', (request, response, next)=>{
     })(request, response, next)
 
 
-
-    response.json({"nana":"sdfsdf"});
-
-
 });
 
 //logout
