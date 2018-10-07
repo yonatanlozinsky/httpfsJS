@@ -1,0 +1,21 @@
+.upload-form{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    min-height: 80vh;
+}
+
+.upload-tbl td,
+.upload-tbl th
+{
+    vertical-align: top;
+}
+
+
+
+/* .drop-zone{
+    overflow-x: scroll;
+
+} */

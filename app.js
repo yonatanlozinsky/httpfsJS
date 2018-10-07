@@ -56,16 +56,16 @@ require('./config').passport(passport); //set passport from config
 //routes
 
 //user-session route
-app.get("*", (request, response, next)=>{
-    console.log(request.user);
-    response.locals.user = request.user || null;
-    console.log("USER");
-    console.log(request.user);
-    console.log("enduser");
+// app.get("*", (request, response, next)=>{
+//     console.log(request.user);
+//     response.locals.user = request.user || null;
+//     console.log("USER");
+//     console.log(request.user);
+//     console.log("enduser");
 
-   next();
+//    next();
 
-});
+// });
 
 
 //users route

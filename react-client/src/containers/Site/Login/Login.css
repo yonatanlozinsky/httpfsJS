@@ -1,0 +1,41 @@
+.login-tbl{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    min-height: 60vh;
+}
+
+input[type="text"],
+input[type="password"]{
+
+    border: 2px solid rgb(51, 192, 126);
+    border-radius: 5px;
+
+}
+
+input[type="submit"]{
+
+    margin-left: -35%;
+    margin-top: 10%;
+
+    background-color:rgb(51, 192, 126);
+    display:box;
+    border:none;
+    padding:5px;
+    color:white;
+}
+input[type="submit"]:hover{
+    background-color:rgb(95, 235, 169);
+    display:box;
+    border:none;
+    padding:5px;
+    color:white;
+}
+
+tbody{
+    padding: 20px;
+    border: 2px solid rgb(41, 155, 102);
+    border-radius:20px;
+}

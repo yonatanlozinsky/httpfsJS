@@ -23,6 +23,15 @@ class Login extends Component {
 
         axios.post('http://localhost:80/users/login', postData)
         .then(response=>{
+            if (response.status == 200){
+                localStorage.setItem("token", response.data.token);
+                localStorage.setItem("userId", response.data.user._id);
+                localStorage.setItem("userName", response.data.user.username);
+                this.props.loadUser();
+            }
+
+            console.log(localStorage.getItem("token"));
+
             console.log(response);
         })
 
@@ -50,7 +59,7 @@ class Login extends Component {
         return (
             <div>
                 <form onSubmit={this.handleSubmit}>
-                    <table className="tbl">
+                    <table className="login-tbl">
                     <tbody>
                         <tr>
                             <th>
@@ -67,14 +76,18 @@ class Login extends Component {
                             <td>
                                 <input type="password" className="signin-input" onChange={this.handlePasswordChange} name="password"/>
                             </td>
-                        </tr>
-                        <tr>
-                            <td>
-                            <input type="submit" className="submit-btn" value="Submit"></input>
-                            </td>
-                        </tr>
+                            </tr>
+                            <tr>
+                                <th></th>
+                                <td>
+                                    <input type="submit" className="submit-btn" value="Submit"></input>
+                                </td>
+                            </tr>
+                      
                         </tbody>
                     </table>
+                    
+
 
 
                 </form>

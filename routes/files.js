@@ -6,10 +6,46 @@ const multerGridFS = require('multer-gridfs-storage');
 const gridFsStream = require('gridfs-stream');
 const mongoose = require('mongoose');
 const path = require('path');
+const jwt = require('jsonwebtoken');
 const router = express.Router();
 
 
 //CONFIGURATIONS AND DEFINITIONS
+
+const handleExpire = (request, response) =>{
+    try{
+        let realToken = parseToken(request.headers.authorization);
+        return realToken;
+        }
+    
+        catch(err){
+            if (err.name === "TokenExpiredError"){ //handle expire
+                
+                response.status(401).json({errors:"Token expired"});
+    
+            }
+
+            else if (err.name === "TypeError"){ //handle expire
+                
+                response.status(401).json({errors:"No token"});
+    
+            }
+
+            else{
+
+                response.status(401).json({errors:"Something went wrong.."});
+
+            }
+            console.log(err);
+        return '';
+        }
+}
+
+const parseToken = token=>{
+    
+    return jwt.verify(token.replace(/^JWT\s/,''), 'hash_coming_soon');
+
+}
 
 let gfs;
 //connect and defile gridfsstream object
@@ -26,17 +62,22 @@ mongoose.createConnection(mongoURI, {useNewUrlParser:true})
 const storage = new multerGridFS({
     url: mongoURI,
     file: (req, file) => {
+        console.log("[Req headers]",req.headers);
+
+        console.log("[File]",file);
       return new Promise((resolve, reject) => {
         crypto.randomBytes(16, (err, buf) => {
           if (err) {
             return reject(err);
           }
           const filename = buf.toString('hex') + path.extname(file.originalname);
+          console.log("[Filename]:",filename)
           const fileInfo = {
             filename: filename,
             bucketName: 'uploads',
             metadata:{
-                uploaderId: req.user._id
+                uploaderId: handleExpire(req.headers.authorization)._id,
+                uploadDescription: req.headers.uploaddescription
           }};
           resolve(fileInfo);
           });
@@ -54,14 +95,23 @@ const upload = multer({ storage });
 
 
 //upload file
-router.post('/upload', upload.single('upload'),(request, response)=>{
-    response.redirect('/');
+router.post('/upload', upload.any(),(request, response)=>{
+    console.log("[Upload post request body]", request.headers, request.body);  
+
+    if (handleExpire(request, response)){
+        response.json({msg:"success"});
+    }
+    
+    
+
+
 });
 
 //get files
 
-router.get('/all', (request,response)=>{
-    gfs.files.find().toArray((err,files)=>{
+router.get('/all' ,(request,response)=>{
+    if (handleExpire(request,response)){
+    gfs.files.find({"metadata":{"uploaderId":handleExpire(request.headers.authorization)._id}}).toArray((err,files)=>{
         console.log(files);
         if (!files || files.length===0){
             return response.status(404).json({
@@ -69,12 +119,14 @@ router.get('/all', (request,response)=>{
             );
             }
         else
-        {return response.json(files);}
+        {
+            return response.json(files);
+        }
     
-})});
+    })}});
 
 //file downloader
-router.get('/download/:id', function(req, res){
+router.get('/download/:id',(req, res) => {
     gfs.collection('uploads'); //set collection name to lookup into
 
     /** First check if file exists */
@@ -88,16 +140,16 @@ router.get('/download/:id', function(req, res){
                 responseMessage: "file not found"
             });
         }
-        /** create read stream */
+        // create read stream
         let readstream = gfs.createReadStream({
             filename: files[0].filename,
             root: "uploads"
         });
-        /** set the proper content type */
+        // set the proper content type
         res.set('Content-Type', files[0].contentType)
         res.set('Content-Disposition', 'attachment; filename="' + files[0].filename + '"');
 
-        /** return response */
+        // return response
         return readstream.pipe(res);
     });
 });

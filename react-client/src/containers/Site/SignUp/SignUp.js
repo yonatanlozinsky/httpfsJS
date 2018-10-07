@@ -10,7 +10,8 @@ class SignUp extends Component {
         password:'',
         password2:'',
         email:'',
-        submitted:false
+        submitted:false,
+        errors:[]
     }
 
     handleSubmit = (event) => {
@@ -57,8 +58,8 @@ class SignUp extends Component {
         })
     }
 
-    shouldComponentUpdate(){
-        return this.state.submitted;
+    shouldComponentUpdate(nextProps, nextState){
+        return (this.state.submitted || nextState.errors.length > 0);
     }
 
     render(){
