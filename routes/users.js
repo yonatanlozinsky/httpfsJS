@@ -121,6 +121,7 @@ router.get('/login', (request,response)=>{
 
 // });
 
+<<<<<<< HEAD
 router.post('/login', (req, res, next) => {
 
     passport.authenticate('local', {session: false}, async (err, user, info) => {
@@ -148,11 +149,17 @@ router.post('/login', (req, res, next) => {
     })
     (req, res, next);
 
+=======
+>>>>>>> 820d68e569da5d3e28fe67a8c5bd6e62f38283fe
 });
 
 //logout
 
+<<<<<<< HEAD
 router.get('/logout', (req, res, next) => {
+=======
+router.get('/logout', (req, res, next)=> {
+>>>>>>> 820d68e569da5d3e28fe67a8c5bd6e62f38283fe
     if (req.session) {
       // delete session object
       req.session.destroy(err => {
