@@ -14,9 +14,10 @@ node index
 - [X] Add MongoDB for users
 - [X] Add GridFS for files
 - [X] Basic site with CSS & JS
-- [ ] Finish all React components
+- [X] Finish all React components (almost! only "view all your files" component missing)
 - [ ] Add redux state management (?)
-- [ ] Add JWT authentication
+- [X] Add JWT authentication
+- [X] Add JWT authorization function
 - [ ] Generate file access links
 - [ ] Test
 - [ ] Build
