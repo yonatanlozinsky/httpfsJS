@@ -18,7 +18,7 @@ Make sure you have MongoDB installed and working on your machine!
 - [X] Add GridFS for files
 - [X] Basic site with CSS & JS
 - [X] Finish all React components
-- [ ] ~~Add redux state management (?)~~ 
+- [ ] ~~Add redux/mobx state management (?)~~ 
 - [X] Add JWT authentication
 - [X] Add JWT authorization functions
 - [X] Generate file access links
