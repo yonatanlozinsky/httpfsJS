@@ -7,6 +7,9 @@ git clone https://github.com/luzushka/httpfsJS
 cd httpfsJS
 node index
 ```
+app.js is the main server file.
+
+
 Make sure you have MongoDB installed and working on your machine!
 
 
