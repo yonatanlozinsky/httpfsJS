@@ -17,7 +17,6 @@ input[type="password"]{
 
 input[type="submit"]{
 
-    margin-left: -35%;
     margin-top: 10%;
 
     background-color:rgb(51, 192, 126);
@@ -26,6 +25,12 @@ input[type="submit"]{
     padding:5px;
     color:white;
 }
+
+.login-tbl input[type="submit"]{
+    margin-left: -35%;
+
+}
+
 input[type="submit"]:hover{
     background-color:rgb(95, 235, 169);
     display:box;
@@ -34,8 +39,14 @@ input[type="submit"]:hover{
     color:white;
 }
 
-tbody{
+.login-tbl tbody{
     padding: 20px;
     border: 2px solid rgb(41, 155, 102);
     border-radius:20px;
+}
+
+.error-div{
+    color:red;
+    position:fixed;
+    top:49%;
 }

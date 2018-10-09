@@ -31,7 +31,7 @@ router.post('/signup',async (request,response)=>{
 
     if (errors){ //validation errors?
         console.log(errors);
-        response.json({
+        response.status(409).json({
             errors:errors
         });
 
@@ -44,9 +44,9 @@ router.post('/signup',async (request,response)=>{
     await User.find({username:username}).then(result=>{
 
         if (result.length>0){
-            response.json({
-                errors:"Username taken"
-            });
+            response.status(409).json({
+                errors:[{msg:"Username taken"}]} //array to not break functionality
+            );
         errors="Username taken";
     }
     })
@@ -59,12 +59,13 @@ router.post('/signup',async (request,response)=>{
     if (!errors){
     await User.find({email:email}).then(result=>{
         if (result.length>0){
-            response.json({errors:"Email address taken"});
+            response.status(409).json({
+                errors:[{msg:"Username taken"}]});
         errors="Email address taken";
     }
     })
     .catch(err=>{
-        response.json({errors:err})
+        response.status(404).json({errors:err})
         errors=err;
     });
     }
@@ -121,7 +122,6 @@ router.get('/login', (request,response)=>{
 
 // });
 
-<<<<<<< HEAD
 router.post('/login', (req, res, next) => {
 
     passport.authenticate('local', {session: false}, async (err, user, info) => {
@@ -141,7 +141,7 @@ router.post('/login', (req, res, next) => {
             }
             else{
                 console.log("[User in await]",user);
-            const token = jwt.sign(user.toJSON(), 'hash_coming_soon',{expiresIn:3000});
+            const token = jwt.sign(user.toJSON(), 'hash_coming_soon',{expiresIn:3600});
 
             return res.status(200).json({user, token});
             }
@@ -149,17 +149,11 @@ router.post('/login', (req, res, next) => {
     })
     (req, res, next);
 
-=======
->>>>>>> 820d68e569da5d3e28fe67a8c5bd6e62f38283fe
 });
 
 //logout
 
-<<<<<<< HEAD
 router.get('/logout', (req, res, next) => {
-=======
-router.get('/logout', (req, res, next)=> {
->>>>>>> 820d68e569da5d3e28fe67a8c5bd6e62f38283fe
     if (req.session) {
       // delete session object
       req.session.destroy(err => {

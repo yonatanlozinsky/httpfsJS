@@ -1,11 +1,31 @@
-.tbl{
-    display:block;
-    background-color:whitesmoke; 
-    width:40%;
-    margin-left:30%;
-    margin-top:10%;
+.signup-top-div{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    min-height: 60vh;
 }
 
+/* .signup-tbl{
+    display:block;
+    background-color:whitesmoke; 
+    min-width:300px;
+    max-width:300px;
+    text-align:left;
+
+} */
+
+.signup-tbl{
+    padding: 20px;
+    border: 2px solid rgb(41, 155, 102);
+    border-radius:20px;
+}
 .submit-btn{
-    margin-left:100%;
+    margin-left:0%;
+}
+
+.signup-error-div{
+    position: fixed;
+    top:53%;
 }

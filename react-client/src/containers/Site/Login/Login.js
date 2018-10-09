@@ -8,11 +8,11 @@ class Login extends Component {
     state = {
         username:'',
         password:'',
-        submitted:false
+        submitted:false,
+        errors:''
     }
 
     handleSubmit = (event) => {
-        console.log(event);
 
         let postData = {
             username: this.state.username,
@@ -21,18 +21,24 @@ class Login extends Component {
 
         this.setState({submitted:true});
 
-        axios.post('http://localhost:80/users/login', postData)
+        axios.post('/users/login', postData)
         .then(response=>{
-            if (response.status == 200){
+            if (response.status === 200){
                 localStorage.setItem("token", response.data.token);
                 localStorage.setItem("userId", response.data.user._id);
                 localStorage.setItem("userName", response.data.user.username);
                 this.props.loadUser();
             }
 
-            console.log(localStorage.getItem("token"));
+        })
+        .catch(err=>{
+            if (err.response.status === 401){
+                this.setState({errors:"Incorrect username or password!"})
+            }
+            else{
+                this.setState({errors:"Something went wrong..."})
 
-            console.log(response);
+            }
         })
 
         event.preventDefault();
@@ -85,6 +91,8 @@ class Login extends Component {
                             </tr>
                       
                         </tbody>
+                        <div className="error-div">{this.state.errors}</div>
+
                     </table>
                     
 

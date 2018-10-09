@@ -4,6 +4,7 @@ import axios from 'axios';
 import Dropzone from 'react-dropzone';
 import FileBox from './FileBox/FileBox';
 
+
 class Upload extends Component{
 
     state={
@@ -16,9 +17,9 @@ class Upload extends Component{
     }
 
     submitFilesHandler = event =>{
-
+        event.target.value="Uploading...";
         event.preventDefault();
-
+        
         let headers = {
            "Type": "formData",
            'Authorization' : this.props.tokenProp,
@@ -26,39 +27,43 @@ class Upload extends Component{
         }
 
         let formData = new FormData();
-        console.log("[Files]:",this.state.files);
         this.state.files.forEach(file=>{
             formData.append("files",file);
         })
-        console.log("[Before post form data]", formData.getAll("files"));
-        axios.post('http://localhost/files/upload', formData, {headers:headers})
+        axios.post('/files/upload', formData, {headers:headers})
         .then(response=>{
-            console.log(response);
+            window.location.href = window.location.href+"allfiles";
         })
         .catch(err=>{
-            console.log("[Logout]",err);
             this.props.logout();
         })
 
     }
 
-
+/**On adding a file */
     onDrop = files=>{
-        let tempFiles = this.state.files.slice();
-        tempFiles.push(files);
-        console.log(this.state.files);
-        console.log(tempFiles)
         this.setState({files:files});
 
+    }
 
+    onRemove = (event, index) =>{
+        event.preventDefault();
+        event.stopPropagation(); //prevent clicking outer div
+        let tempFiles = this.state.files.slice();
+        tempFiles.splice(index,1);
+        this.setState({files:tempFiles});
     }
 
     fileInputChangedHandler = (event) =>{
         this.setState({files: event.target.files});
-        console.log(this.state.file.toString());
     }
 
     render(){
+
+        const style={
+            overflowY:"scroll",
+            width:"400px"
+        }
 
         return (
             <div className="upload-form">
@@ -66,18 +71,20 @@ class Upload extends Component{
                 <form onSubmit={this.submitFilesHandler} encType="multipart/form-data">
                     <table className="upload-tbl">
                     <tbody>
-                        <tr><th>File:</th>
+                        <tr><th></th>
                         <td>
-                            <Dropzone onDrop={this.onDrop.bind(this)}>
+                            <Dropzone onDrop={this.onDrop.bind(this)} className="dropzone">
                             {this.state.files.length===0?(
                                 <p>Try dropping some files here, or click to select files to upload.</p>
                             )
                                 :(<div>
                                     {
-                                    this.state.files.map(f => <FileBox
+                                    this.state.files.map((f,index) => <FileBox
                                         key={f.name}
                                         fileName={f.name}
                                         size={f.size}
+                                        onRemove={this.onRemove}
+                                        index={index}
                                         />)
                                     }
                                 </div>)}
@@ -85,7 +92,7 @@ class Upload extends Component{
                             </Dropzone>
                             
                             </td></tr>
-                        <tr><th>Description:</th><td><input type="text" onChange={this.descriptionChangedHandler}></input></td></tr>
+                        <tr><th></th><td><input maxlength="30"placeholder="Describe your upload... (30 chars)" type="text" onChange={this.descriptionChangedHandler}></input></td></tr>
                         <tr><th></th><td><input type="submit" value="Upload!"></input></td></tr>
                     </tbody>
                     </table>

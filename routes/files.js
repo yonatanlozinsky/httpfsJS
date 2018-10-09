@@ -14,6 +14,7 @@ const router = express.Router();
 
 const handleExpire = (request, response) =>{
     try{
+ 
         let realToken = parseToken(request.headers.authorization);
         return realToken;
         }
@@ -25,7 +26,7 @@ const handleExpire = (request, response) =>{
     
             }
 
-            else if (err.name === "TypeError"){ //handle expire
+            else if (err.name === "TypeError"){ //handle no-token
                 
                 response.status(401).json({errors:"No token"});
     
@@ -62,21 +63,21 @@ mongoose.createConnection(mongoURI, {useNewUrlParser:true})
 const storage = new multerGridFS({
     url: mongoURI,
     file: (req, file) => {
-        console.log("[Req headers]",req.headers);
 
         console.log("[File]",file);
       return new Promise((resolve, reject) => {
+          if (!parseToken(req.headers.authorization)) reject("Couldn't parse token"); //authorization
         crypto.randomBytes(16, (err, buf) => {
           if (err) {
             return reject(err);
           }
-          const filename = buf.toString('hex') + path.extname(file.originalname);
+          const filename = buf.toString('hex') + path.extname(file.originalname); //given up on that one...
           console.log("[Filename]:",filename)
           const fileInfo = {
-            filename: filename,
+            filename: file.originalname,
             bucketName: 'uploads',
             metadata:{
-                uploaderId: handleExpire(req.headers.authorization)._id,
+                uploaderId: parseToken(req.headers.authorization)._id,
                 uploadDescription: req.headers.uploaddescription
           }};
           resolve(fileInfo);
@@ -101,20 +102,16 @@ router.post('/upload', upload.any(),(request, response)=>{
     if (handleExpire(request, response)){
         response.json({msg:"success"});
     }
-    
-    
-
 
 });
 
 //get files
 
 router.get('/all' ,(request,response)=>{
-    if (handleExpire(request,response)){
-    gfs.files.find({"metadata":{"uploaderId":handleExpire(request.headers.authorization)._id}}).toArray((err,files)=>{
-        console.log(files);
+    if (handleExpire(request,response)){ //auth
+    gfs.files.find({"metadata.uploaderId":parseToken(request.headers.authorization)._id}).toArray((err,files)=>{
         if (!files || files.length===0){
-            return response.status(404).json({
+            return response.status(200).json({
                 err:"No files exist"}
             );
             }
@@ -127,13 +124,15 @@ router.get('/all' ,(request,response)=>{
 
 //file downloader
 router.get('/download/:id',(req, res) => {
+
     gfs.collection('uploads'); //set collection name to lookup into
 
-    /** First check if file exists */
     let fileId = req.params.id;
     
     gfs.files.find({_id: new ObjectId(fileId)}).toArray((err, files)=>{
         console.log(files.length);
+        
+        /** First check if file exists */
         if(!files || files.length === 0){
             return res.status(404).json({
                 responseCode: 1,
@@ -146,8 +145,9 @@ router.get('/download/:id',(req, res) => {
             root: "uploads"
         });
         // set the proper content type
+
         res.set('Content-Type', files[0].contentType)
-        res.set('Content-Disposition', 'attachment; filename="' + files[0].filename + '"');
+        res.set('Content-Disposition', 'attachment; filename="' + encodeURIComponent(files[0].filename) + '"');
 
         // return response
         return readstream.pipe(res);
@@ -157,7 +157,7 @@ router.get('/download/:id',(req, res) => {
 
 //get specific file json
 
-router.get('/get/:id', (request,response)=>{
+router.get('/get/:id', (request, response)=>{
     gfs.files.findOne({_id:new ObjectId(request.params.id)}, (err,file)=>{
         if (!file || file.length===0){
             return response.status(404).json({
@@ -172,14 +172,21 @@ router.get('/get/:id', (request,response)=>{
 
 //delete file
 
-router.delete('/files/:id', (request, response)=>{
-    gfs.remove({_id: request.params.id, root: 'uploads'}, (err, gridStore)=>{
+router.delete('/:id', (request, response)=>{
+    console.log("got into delete");
+    if (handleExpire(request,response)){
+    gfs.remove({_id: request.params.id, root: 'uploads'}, err=>{
         if (err){
+            console.log(err);
             return response.status(404).json({err:err});
         }
 
-        response.redirect('/');
+        response.status(204).json("deleted successfully");
     });
+}
+else{
+    console.log("not err")
+}
 })
 
 

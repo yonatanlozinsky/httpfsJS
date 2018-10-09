@@ -11,11 +11,10 @@ class SignUp extends Component {
         password2:'',
         email:'',
         submitted:false,
-        errors:[]
+        errors:''
     }
 
-    handleSubmit = (event) => {
-        console.log(event);
+    handleSubmit = event => {
 
         let postData = {
             username: this.state.username,
@@ -26,10 +25,21 @@ class SignUp extends Component {
 
         this.setState({submitted:true});
 
-        axios.post('http://localhost:80/users/signup', postData)
+        axios.post('/users/signup', postData)
         .then(response=>{
-            console.log(response);
+
+            if (response.data.msg === "Success - user created!"){
+                this.setState({errors:"Woohoo! user created ^_^"},()=>{setTimeout(()=>window.location.href="/",1000)});
+            }
         })
+        .catch(err=>{
+            if (err.response.status === 409){
+                let newErrorsArr = err.response.data.errors.map(error=>error.msg);
+                let newErrorsString = newErrorsArr.join("\n");
+            this.setState({errors:newErrorsString});
+            }
+        })
+
 
         event.preventDefault();
     }
@@ -59,14 +69,14 @@ class SignUp extends Component {
     }
 
     shouldComponentUpdate(nextProps, nextState){
-        return (this.state.submitted || nextState.errors.length > 0);
+        return (this.state.submitted || nextState.errors !== this.state.errors);
     }
 
     render(){
         return (
-            <div>
+            <div className="signup-top-div">
                 <form onSubmit={this.handleSubmit}>
-                    <table className="tbl">
+                    <table className="signup-tbl">
                     <tbody>
                         <tr>
                             <th>
@@ -101,6 +111,9 @@ class SignUp extends Component {
                             </td>
                         </tr>
                         <tr>
+                            <th>
+
+                            </th>
                             <td>
                             <input type="submit" className="submit-btn" value="Submit"></input>
                             </td>
@@ -110,6 +123,8 @@ class SignUp extends Component {
 
 
                 </form>
+
+                <div className="signup-error-div">{this.state.errors}</div>
             </div>
         );
     }

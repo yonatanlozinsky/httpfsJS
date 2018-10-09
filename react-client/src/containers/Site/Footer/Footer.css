@@ -1,0 +1,15 @@
+.footer{
+    bottom:0px;
+    width:100%;
+    position:fixed;
+    color:white;
+    background-color:rgb(51, 192, 126);
+}
+
+.footer a{
+    color:white;
+}
+
+.footer a:hover{
+    color:#f8bb48;
+}

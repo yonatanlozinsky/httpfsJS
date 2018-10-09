@@ -1,7 +1,7 @@
 const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
-const session = require('express-session');
+const session = require('express-session'); //it's jwt now
 const methodOverride = require ('method-override');
 const expressValidator = require('express-validator');
 const passport = require('passport');
@@ -16,22 +16,20 @@ app.use(methodOverride("_method")); //for the "delete" post request in files
 
 
 
-app.use(express.static(path.join(__dirname, '/public')));
-
-app.set('view engine', 'ejs');
+// app.use(express.static(`${__dirname}/public/build/static`));
 
 //session
-app.use(session({
-    secret: 'yolozinsky',
-    resave: true,
-    saveUninitialized: true
-  }));
+// app.use(session({
+//     secret: 'yolozinsky',
+//     resave: true,
+//     saveUninitialized: true
+//   }));
 //
 
-//error validator middleware
+//error validator
 app.use(expressValidator({
-    errorFormatter: (param, msg, value)=> {
-        let namespace = param.split('.')
+    errorFormatter: function(param, msg, value) {
+        var namespace = param.split('.')
         , root    = namespace.shift()
         , formParam = root;
   
@@ -53,7 +51,6 @@ app.use(passport.initialize());
 app.use(passport.session());
 require('./config').passport(passport); //set passport from config
 
-//routes
 
 //user-session route
 // app.get("*", (request, response, next)=>{
@@ -68,6 +65,23 @@ require('./config').passport(passport); //set passport from config
 // });
 
 
+//routes
+
+//index route
+app.get('/', (req, res)=>{
+  res.sendFile(path.join(__dirname, '/public/build/index.html'));
+})
+
+//favicon route
+app.get('/favicon.ico', (req, res)=>{
+  res.sendFile(path.join(__dirname, '/public/build/favicon.ico'));
+})
+
+//manifest route
+app.get('/manifest.json', (req, res)=>{
+  res.sendFile(path.join(__dirname, '/public/build/manifest.json'));
+})
+
 //users route
 const usersRoute = require('./routes/users');
 app.use('/users', usersRoute);
@@ -76,15 +90,9 @@ app.use('/users', usersRoute);
 const filesRoute = require('./routes/files')
 app.use('/files', filesRoute);
 
-
-//index get
-app.get('/', (request, response)=>{
-    response.render('index', {files:false});
-
-});
-
-//get statics
-
+//statics route;
+const staticsRoute = require('./routes/statics')
+app.use('/static', staticsRoute);
 
 
 const port=80;

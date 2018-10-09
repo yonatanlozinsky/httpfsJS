@@ -7,12 +7,12 @@ const navbar = (props) =>{
     let loginObj = {
         btnText: "Sign Up",
         btnLink: "/signup",
-        onClickAction: ()=>{console.log("Entered signup")}
+        onClickAction: ()=>{console.log("")}
     }
 
     if (props.isUser){
         loginObj.btnLink = "/"
-        loginObj.btnText = props.user;
+        loginObj.btnText = "Logout from "+props.user;
         loginObj.onClickAction = props.logoutHandler;
     }
 
@@ -20,9 +20,10 @@ const navbar = (props) =>{
         <div className="navbar">
             <nav>
                 <ul>
-                    <li><Link to="/">Home</Link></li>
-                    <li><Link to="/upload">Upload</Link></li>
-                    <li className="signup-btn"><Link onClick={loginObj.onClickAction}  to={loginObj.btnLink}>{loginObj.btnText}</Link></li>
+                    <li><Link to="/">{props.isUser?"Upload":"Login"}</Link></li>
+                    {props.isUser?
+                    <li><Link to="/allfiles">Your Files</Link></li>:""}
+                    <li className="signup-btn"><Link onClick={loginObj.onClickAction} to={loginObj.btnLink}>{loginObj.btnText}</Link></li>
                 </ul>
             </nav>
 

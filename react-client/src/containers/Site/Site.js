@@ -1,9 +1,12 @@
 import React, {Component} from 'react';
-import { Route } from 'react-router-dom';
+import { Route, Redirect } from 'react-router-dom';
 import Navbar from './Navbar/Navbar';
 import SignUp from './SignUp/SignUp'
 import Login from './Login/Login';
 import Upload from './Upload/Upload'
+import FileViewer from './FileViewer/FileViewer';
+import Footer from './Footer/Footer';
+
 class Site extends Component {
     
     state = {
@@ -16,8 +19,8 @@ class Site extends Component {
     
     handleLogout = () =>{
         localStorage.clear();
-        console.log("[Entered handleLogout]");
-        this.setState({user:'', username:'', userId:'', token:''})
+        this.setState({user:'', username:'', userId:'', token:''});
+        window.location.href = "/"
     }
 
     loadUsers = () =>{
@@ -31,7 +34,7 @@ class Site extends Component {
     }
 
     shouldComponentUpdate(){
-        console.log("[Entered shouldComponentUpdate]");
+        // console.log("[Entered shouldComponentUpdate]");
         return true;
     }
 
@@ -44,20 +47,26 @@ class Site extends Component {
         </div>
     )
 
+    yesUserRoutes = (
+        <div>
+            <Route path="/" exact render={()=><Upload
+                    tokenProp={this.state.token}
+                    userId={this.state.userId}
+                    logout={this.handleLogout}/>}></Route>
+            <Route path="/allfiles" exact render={()=><FileViewer tokenProp={this.state.token} logout={this.handleLogout}/>}></Route>
+        </div>
+    );
+
 
     render(){
         return(
         <div>
             <Navbar user={this.state.username} isUser={this.state.user} logoutHandler={this.handleLogout}/>
             { (this.state.user) ? (
-                <Route path="/" exact render={()=><Upload
-                    tokenProp={this.state.token}
-                    userId={this.state.userId}
-                    logout={this.handleLogout}/>}></Route>)
+               this.yesUserRoutes)
                 :(this.noUserRoutes)
                 }
-            {console.log("[State]",this.state)}
-
+                <Footer></Footer>
     </div>
     );
 }

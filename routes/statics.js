@@ -1,15 +1,12 @@
 const express = require('express');
 const path = require('path');
-const router = express.router();
+const router = express.Router();
 
 
 
-router.get('/static/css/:dir', (request, response)=>{
+router.get('/css/:dir', (request, response)=>{
     try{
-        console.log("got into");
-        const pt = path.join(__dirname,"public", "build","static","css",request.params.dir);
-        console.log(pt);
-        response.sendFile(path.join(__dirname,"public", "build","static","css",request.params.dir));
+        response.sendFile(path.join(__dirname,"../public", "build","static","css",request.params.dir));
         
     }
     catch (err){        
@@ -19,12 +16,9 @@ router.get('/static/css/:dir', (request, response)=>{
     }
 });
 
-router.get('/static/js/:dir', (request, response)=>{
+router.get('/js/:dir', (request, response)=>{
     try{
-        console.log("got into");
-        const pt = path.join(__dirname,"public", "build","static","js",request.params.dir);
-        console.log(pt);
-        response.sendFile(path.join(__dirname,"public", "build","static","js",request.params.dir));
+        response.sendFile(path.join(__dirname,"../public", "build","static","js",request.params.dir));
         
     }
     catch (err){
