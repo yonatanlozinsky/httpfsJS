@@ -1,12 +1,15 @@
 # httpfsJS
 A file upload client+server written using MERN stack.
 
-## How to run (not finished yet)
+## How to run
 ```
 git clone https://github.com/luzushka/httpfsJS
 cd httpfsJS
 node index
 ```
+Make sure you have MongoDB installed and working on your machine!
+
+
 
 ### To do list:
 - [X] Simple HTML + JS interface that reads files (ejs)
@@ -15,10 +18,10 @@ node index
 - [X] Add GridFS for files
 - [X] Basic site with CSS & JS
 - [X] Finish all React components (almost! only "view all your files" component missing)
-- [ ] Add redux state management (?)
+- [ ] ~~Add redux state management (?)~~ 
 - [X] Add JWT authentication
-- [X] Add JWT authorization function
-- [ ] Generate file access links
-- [ ] Test
-- [ ] Build
+- [X] Add JWT authorization functions
+- [X] Generate file access links
+- [X] Test
+- [X] Build
 - [ ] Deploy (?)
