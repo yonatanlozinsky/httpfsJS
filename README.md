@@ -17,7 +17,7 @@ Make sure you have MongoDB installed and working on your machine!
 - [X] Add MongoDB for users
 - [X] Add GridFS for files
 - [X] Basic site with CSS & JS
-- [X] Finish all React components (almost! only "view all your files" component missing)
+- [X] Finish all React components
 - [ ] ~~Add redux state management (?)~~ 
 - [X] Add JWT authentication
 - [X] Add JWT authorization functions
