@@ -25,6 +25,6 @@ Make sure you have MongoDB installed and working on your machine!
 - [X] Add JWT authentication
 - [X] Add JWT authorization functions
 - [X] Generate file access links
-- [X] Test
+- [X] Manual test
 - [X] Build
-- [ ] Deploy (?)
+- [ ] Deploy (deployed to AWS, it worked and I took it down)
