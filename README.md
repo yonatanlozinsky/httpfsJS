@@ -5,7 +5,7 @@ A file upload client+server written using MERN stack.
 ```
 git clone https://github.com/luzushka/httpfsJS
 cd httpfsJS
-node index
+node app
 ```
 app.js is the main server file.
 
